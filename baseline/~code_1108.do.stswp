@@ -1,0 +1,47 @@
+
+ cd"/Users/libingchen/Desktop/NTUP_BL/baseline"
+ 
+ global c "econ1 gov lpr infra open urban edu3" 
+
+ // ====== psm ======
+   psmatch2 treat $c , outcome(EMP) n(10) caliper(0.1)
+   pstest $c ,both
+ // ====== baseline regression ======
+   qui reghdfe EMP did if year >= 2007,ab(id year) vce(r)
+   eststo m1 
+   qui reghdfe EMP did $c if year >= 2007,ab(id  year)  vce(r)
+   eststo m2
+   qui reghdfe EMP did if _weight!=.&year >= 2007 ,ab(id  year) vce(r)
+   eststo m3
+   qui reghdfe EMP did $c if _weight!=.&year >= 2007 ,ab(id  year) vce(r)
+   eststo m4  
+   
+   
+   estfe m1 m2 m3 m4 , labels(id "CITY" year "YEAR")
+   esttab m1 m2 m3 m4 using baseline.rtf , append nogap compress ///
+       star( * 0.10 ** 0.05 *** 0.01 ) ///
+	   b(%9.4f) se(%9.4f) sca(N r2_within) title("baseline") ///
+	   indicate("CITY =*.id" "YEAR=*.year") order(did)
+
+ *================================================================
+ *                       mechanisms2
+ *================================================================
+ // ====== market ======	
+	reghdfe productmarket did $c if year >= 2007,ab(city year)  vce(r)
+	eststo m1
+	reghdfe factormarket did $c if year >= 2007,ab(city year)  vce(r)
+	eststo m2  
+
+  // ====== labor ======
+	 reghdfe labor1 did $c if year >= 2007,ab(city year)  vce(r)
+	 eststo m3
+	 reghdfe labor2 did $c if year >= 2007,ab(city year)  vce(r)
+	 eststo m4
+	 estfe m1 m2 m3 m4, labels(city "CITY" year "YEAR")
+     esttab m1 m2 m3 m4 using  Mechanism.rtf , append nogap compress ///
+       star( * 0.10 ** 0.05 *** 0.01 ) ///
+	   b(%9.4f) se(%9.4f) sca(N r2_within) title("labor") ///
+	   indicate("Controls = $c""CITY =*.city" "YEAR=*.year") order(did)
+	   
+	   
+	   
