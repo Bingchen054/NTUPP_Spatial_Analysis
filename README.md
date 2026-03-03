@@ -2,7 +2,7 @@
 
 This repository contains the replication materials for the manuscript:
 
-**"New-type Urbanization Policy, Urban Expansion, and Employment Quality in Chinese Cities: Evidence from a Quasi-natural Experiment"**
+**"New-type Urbanization Policy, Urban Expansion, and Employment Quality in China: Evidence from a Quasi-natural Experiment"**
 
 The study examines how China’s New-type Urbanization Pilot Policy (NTUPP) affects employment quality and how its impacts are moderated by two- and three-dimensional urban form.
 
